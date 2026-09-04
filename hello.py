@@ -4,22 +4,17 @@ print("Khant's first post!")
 print("=========================")
 
 username = "La Nuit"
-bio = "NightOwl Shake it if you are one"
-followers = 100
+bio = "means the night"
+followers = 200
+print ("Username:",username)
+print ("Bio:",bio)
+print ("Followers:",followers)
 
-print("Username:", username)
-print("Bio:", bio)
-print("Followers:", followers)
-
-followers= 100
-
-followers += 50
+followers += 20
 print("Day 1:", followers)
-
-followers +=20
+followers -= 6
 print("Day 2:", followers)
-
-followers -=10
+followers += 10
 print("Day 3:", followers)
 
 username = input("Enter Username: ")
@@ -34,4 +29,4 @@ print("Category:", category)
 
 if age>40 and category== "fun":
     print("You are old what is fun for you???")
-    
+
