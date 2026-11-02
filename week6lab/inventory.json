@@ -1,0 +1,25 @@
+{
+    "products": [
+        {
+            "id": "CUPS",
+            "name": "jj",
+            "price": 400.0,
+            "stock": 5
+        }
+    ],
+    "transaction_history": [
+        {
+            "action": "ADD",
+            "product_id": "CUPS",
+            "quantity_change": 3,
+            "details": "Added jj with initial stock 3"
+        },
+        {
+            "action": "UPDATE_STOCK",
+            "product_id": "CUPS",
+            "old_stock": 3,
+            "new_stock": 5,
+            "quantity_change": 2
+        }
+    ]
+}
