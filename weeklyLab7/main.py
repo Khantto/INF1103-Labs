@@ -61,7 +61,6 @@ def load_inventory():
                     item["name"],
                     float(item["price"]),
                     int(item["stock"]),
-                    float(item["weight"]),
                     float(item["download_size"])
                 )
             else:
@@ -87,7 +86,7 @@ def save_inventory(inventory, history):
         item = product.to_dict()
         if isinstance(product,PhysicalProduct):
             item["type"] = "physical"
-            item["weight"] = product.get_weight()
+            item["weight"] = product.get_weights()
 
         elif isinstance(product,DigitalProduct):
             item["type"] = "digital"
@@ -246,7 +245,7 @@ def search_product(inventory):
         print("Product Found")
         print("-" * 40)
         product.display_information()
-        print("\nFulfilment information:",product.get_fulfilment_info())
+        print("Fulfilment information:",product.get_fulfilment_info())
         print("-" * 40)
 
 

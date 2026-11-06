@@ -1,10 +1,7 @@
 from abc import ABC, abstractmethod
 
 class Product(ABC):
-    @abstractmethod
-    def get_fulfilmentinfo():
-        pass
-    
+        
     def __init__(self, product_id, name, price, stock):
         self.__product_id = product_id
         self.__name = name
@@ -24,7 +21,6 @@ class Product(ABC):
         return self.__stock
 
     def update_stock(self, quantity):
-        """Set the new stock quantity."""
         if not isinstance(quantity, int) or isinstance(quantity, bool):
             raise ValueError("Stock must be an integer.")
 
@@ -40,6 +36,10 @@ class Product(ABC):
             f"Price: ${self.__price:.2f} | "
             f"Stock: {self.__stock}"
         )
+
+    @abstractmethod
+    def get_fulfilment_info(self):
+        pass
 
     def to_dict(self):
         """Convert this object to a dictionary for JSON storage."""

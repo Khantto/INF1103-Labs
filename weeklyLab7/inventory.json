@@ -1,4 +1,48 @@
 {
-    "products": [],
-    "transaction_history": []
+    "products": [
+        {
+            "id": "P001",
+            "name": "laptop",
+            "price": 300.0,
+            "stock": 5,
+            "type": "physical",
+            "weight": 20.0
+        },
+        {
+            "id": "P002",
+            "name": "windows",
+            "price": 4000.0,
+            "stock": 15,
+            "type": "digital",
+            "download_size": 200.0
+        }
+    ],
+    "transaction_history": [
+        {
+            "action": "ADD",
+            "product_id": "P001",
+            "quantity_change": 3,
+            "details": "Added laptop with initial stock 3"
+        },
+        {
+            "action": "ADD",
+            "product_id": "P002",
+            "quantity_change": 20,
+            "details": "Added windows with initial stock 20"
+        },
+        {
+            "action": "UPDATE_STOCK",
+            "product_id": "P001",
+            "old_stock": 3,
+            "new_stock": 5,
+            "quantity_change": 2
+        },
+        {
+            "action": "UPDATE_STOCK",
+            "product_id": "P002",
+            "old_stock": 20,
+            "new_stock": 15,
+            "quantity_change": -5
+        }
+    ]
 }
