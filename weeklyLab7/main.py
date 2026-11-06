@@ -3,9 +3,10 @@ import os
 
 from product import Product
 from inventory import Inventory
+from digitalproduct import DigitalProduct
+from physicalproduct import PhysicalProduct
 
 FILE_NAME = "inventory.json"
-
 
 def load_inventory():
     """Load product objects and transaction history from JSON."""
@@ -23,7 +24,6 @@ def load_inventory():
         with open(FILE_NAME, "r", encoding="utf-8") as file:
             data = json.load(file)
 
-        # Support the original Lab 5 format: a list of products.
         if isinstance(data, list):
             data = {
                 "products": data,
@@ -45,13 +45,27 @@ def load_inventory():
         for item in products:
             if not isinstance(item, dict):
                 raise ValueError("Invalid product entry.")
+            
+            if item["type"] == "physical":
 
-            product = Product(
-                item["id"],
-                item["name"],
-                float(item["price"]),
-                int(item["stock"])
-            )
+                product = PhysicalProduct(
+                    item["id"],
+                    item["name"],
+                    float(item["price"]),
+                    int(item["stock"]),
+                    float(item["weight"])
+                )
+            elif item["type"] =="digital":
+                product = DigitalProduct(
+                    item["id"],
+                    item["name"],
+                    float(item["price"]),
+                    int(item["stock"]),
+                    float(item["weight"]),
+                    float(item["download_size"])
+                )
+            else:
+                raise ValueError("Unknown product type.")
 
             inventory.add_product(product)
 
@@ -67,11 +81,22 @@ def load_inventory():
 
 def save_inventory(inventory, history):
     """Save product data and transaction history to JSON."""
+    product_data =[]
+
+    for product in inventory.get_products():
+        item = product.to_dict()
+        if isinstance(product,PhysicalProduct):
+            item["type"] = "physical"
+            item["weight"] = product.get_weight()
+
+        elif isinstance(product,DigitalProduct):
+            item["type"] = "digital"
+            item["download_size"] = product.get_download_size()
+
+        product_data.append(item)
+    
     data = {
-        "products": [
-            product.to_dict()
-            for product in inventory.get_products()
-        ],
+        "products": product_data,
         "transaction_history": history
     }
 
@@ -114,7 +139,44 @@ def add_product(inventory, history):
         print("Invalid input. Enter a valid price and integer stock.")
         return
 
-    product = Product(product_id, name, price, stock)
+    print("\nChoose Product Type:")
+    print("1. Physical Product")
+    print("2. Digital Product")
+
+    choice =input("Enter choice: ").strip()
+
+    if choice == "1":
+        try:
+            weight = float(input("Enter Weight (kg): "))
+
+            if weight <= 0:
+                print("Weight must be greater than zero.")
+                return
+            
+            product = PhysicalProduct(product_id, name, price, stock, weight)
+
+        except ValueError:
+            print("Invalid weight.")
+            return
+
+    elif choice == "2":
+        try:
+            download_size = float(input("Enter Download Size (MB): "))
+                
+            if download_size <= 0:
+                print("Download size must be greater than zero.")
+                return
+                
+            product = DigitalProduct(product_id, name, price, stock, download_size)
+                
+        except ValueError:
+            print("Invalid download size.")
+            return
+        
+
+    else:
+        print("Invalid product type.")
+        return
 
     try:
         inventory.add_product(product)
@@ -131,7 +193,6 @@ def add_product(inventory, history):
 
     print("Product added successfully!")
 
-
 def update_stock(inventory, history):
     print("\nUpdate Stock")
 
@@ -143,9 +204,8 @@ def update_stock(inventory, history):
         return
 
     print("Product Found:")
-    print("Name:", product.get_name())
-    print("Current Stock:", product.get_stock())
-
+    product.display_information()
+   
     try:
         new_stock = int(input("New Stock Quantity: "))
 
@@ -181,10 +241,12 @@ def search_product(inventory):
 
     if product is None:
         print("Product not found.")
+
     else:
         print("Product Found")
         print("-" * 40)
         product.display_information()
+        print("\nFulfilment information:",product.get_fulfilment_info())
         print("-" * 40)
 
 
@@ -227,7 +289,6 @@ def main():
             save_inventory(inventory, history)
 
         elif option == "6":
-            print("Saving inventory before exit...")
             save_inventory(inventory, history)
             print("Thank you for using Inventory Management System.")
             print("Program terminated.")
